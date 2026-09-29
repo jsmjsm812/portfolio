@@ -783,8 +783,21 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
   .site-shell { margin-bottom: 48px; }
 }
 
+/* ── 등장·호버 모션 (JS 등장 연출은 아래 스크립트, 여기는 호버와 상세 창) ── */
+.proj-cover img { transition: transform .8s cubic-bezier(.16, 1, .3, 1); }
+.proj:hover .proj-cover img { transform: scale(1.06); }
+.mini { transition: transform .3s cubic-bezier(.16, 1, .3, 1), border-color .2s; }
+.mini:hover { transform: translateY(-3px); border-color: rgba(255, 125, 77, .55); }
+.pill:active, .proj:active { transform: scale(.98); }
+.hero-name .ch { display: inline-block; will-change: transform; }
+
+/* 상세 창: 섹션이 스크롤로 들어올 때 한 번씩 올라오며 나타난다 */
+.dsec.rv { opacity: 0; transform: translateY(18px); transition: opacity .6s cubic-bezier(.16, 1, .3, 1), transform .6s cubic-bezier(.16, 1, .3, 1); }
+.dsec.rv.in { opacity: 1; transform: none; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .dsec.rv { opacity: 1; transform: none; }
   *, .star-layer, .star-layer::after { animation: none !important; transition-duration: .01ms !important; }
   /* 씬 전환은 즉시, 시차는 정지. 캐릭터는 진행도 표시라 그대로 둔다 */
   .scene { transform: none; }
@@ -1536,6 +1549,7 @@ PROJECTS.chronicle.clip = { id: 'kNYvXD6YcRg', start: 83,  end: 96 };
     last = document.activeElement;
     render(key);
     ov.hidden = false;
+    if (window.__revealDetail) window.__revealDetail();
     if (PROJECTS[key] && PROJECTS[key].clip) startClip(PROJECTS[key].clip);
     document.body.classList.add('locked');
     // 상세를 열면 배경이 그 게임의 씬으로 전환된다
@@ -1719,6 +1733,119 @@ PROJECTS.chronicle.clip = { id: 'kNYvXD6YcRg', start: 83,  end: 96 };
     });
   }, { rootMargin: '-30% 0px -60% 0px' });
   targets.forEach(function (t) { if (t) spy.observe(t); });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   콘텐츠 등장 모션
+   - 첫 화면: 이름 글자가 하나씩 찍히고, 나머지 요소가 순서대로 올라온다
+   - 스크롤: 카드가 화면에 들어올 때 한 번만 나타난다 (ScrollTrigger.batch)
+   - 숫자 카운트, 프로젝트 필터 전환, 상세 창 섹션 순차 등장
+   모션 줄이기 설정이면 전부 건너뛰고, GSAP이 막혀도 내용은 그대로 보인다.
+   ══════════════════════════════════════════════════════════════ */
+(function () {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EASE = 'power3.out';
+
+  /* 상세 창 (GSAP 없이 CSS + 옵저버) */
+  var detailIO = null;
+  window.__revealDetail = function () {
+    if (detailIO) { detailIO.disconnect(); detailIO = null; }
+    if (reduced || !('IntersectionObserver' in window)) return;
+    var root = document.getElementById('d-scroll');
+    var secs = [].slice.call(document.querySelectorAll('#d-body .dsec'));
+    var fired = false;
+    detailIO = new IntersectionObserver(function (es) {
+      fired = true;
+      es.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('in');
+        if (detailIO) detailIO.unobserve(en.target);
+      });
+    }, { root: root, rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    secs.forEach(function (s) { s.classList.add('rv'); detailIO.observe(s); });
+    // 관찰자가 끝내 한 번도 발동하지 않는 환경이면 내용이 투명하게 남지 않도록 전부 보여준다
+    setTimeout(function () { if (!fired) secs.forEach(function (s) { s.classList.add('in'); }); }, 1200);
+  };
+
+  if (reduced || !window.gsap) return;
+  var gsap_ = window.gsap;
+  if (window.ScrollTrigger) gsap_.registerPlugin(window.ScrollTrigger);
+
+  /* 이름 글자를 낱자로 쪼갠다 (CHO / SUNGMIN) */
+  function splitChars(el) {
+    var chars = [];
+    [].slice.call(el.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        n.textContent.split('').forEach(function (c) {
+          var s = document.createElement('span'); s.className = 'ch'; s.textContent = c; frag.appendChild(s); chars.push(s);
+        });
+        n.parentNode.replaceChild(frag, n);
+      } else if (n.nodeType === 1 && n.tagName !== 'BR') {
+        chars = chars.concat(splitChars(n));
+      }
+    });
+    return chars;
+  }
+
+  /* 1. 첫 화면 */
+  var name = document.querySelector('.hero-name');
+  var chars = name ? splitChars(name) : [];
+  var rest = [].slice.call(document.querySelectorAll('.hero-copy > *')).filter(function (e) { return e !== name; });
+  var art = document.querySelector('.art-slot');
+  var tl = gsap_.timeline({ defaults: { ease: EASE } });
+  if (rest.length) tl.from(rest[0], { autoAlpha: 0, y: 14, duration: .5 }, 0.05);
+  if (chars.length) tl.from(chars, { autoAlpha: 0, y: -26, scale: .7, duration: .45, stagger: .045, ease: 'back.out(2.2)', clearProps: 'all' }, 0.12);
+  if (rest.length > 1) tl.from(rest.slice(1), { autoAlpha: 0, y: 22, duration: .7, stagger: .09, clearProps: 'opacity,visibility,transform' }, 0.55);
+  if (art) tl.from(art, { autoAlpha: 0, x: 48, duration: 1, clearProps: 'opacity,visibility,transform' }, 0.35);
+  var heroArt = document.querySelector('.hero-art');
+  if (heroArt) gsap_.to(heroArt, { y: -8, duration: 2.8, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.4 });
+
+  if (!window.ScrollTrigger) return;
+  var ST = window.ScrollTrigger;
+
+  /* 2. 카드: 화면에 들어올 때 한 번씩 */
+  function reveal(sel, o) {
+    var els = gsap_.utils.toArray(sel);
+    if (!els.length) return;
+    gsap_.set(els, { autoAlpha: 0, y: o.y });
+    ST.batch(els, {
+      start: o.start || 'top 90%', once: true,
+      onEnter: function (batch) {
+        gsap_.to(batch, { autoAlpha: 1, y: 0, duration: o.dur || .8, ease: EASE, stagger: o.stagger, delay: o.delay || 0, overwrite: true, clearProps: 'opacity,visibility,transform' });
+      }
+    });
+  }
+  reveal('.block-board > .block-card', { y: 34, stagger: .14, dur: .9 });
+  reveal('.block-board .mini', { y: 18, stagger: .07, delay: .18 });
+  reveal('.block-board .stat', { y: 14, stagger: .07, delay: .2 });
+  reveal('.block-board .featured-points > div', { y: 14, stagger: .08, delay: .25 });
+  reveal('.block-board .proj', { y: 26, stagger: .12, delay: .15, dur: .85 });
+  reveal('.block-board .hire-facts > div', { y: 14, stagger: .08, delay: .2 });
+  reveal('.block-board .contact-grid a', { y: 14, stagger: .1, delay: .25 });
+
+  /* 3. 숫자 카운트 (3, 2 같은 숫자 통계만) */
+  gsap_.utils.toArray('.stat b').forEach(function (b) {
+    var n = parseInt(b.textContent, 10);
+    if (!/^\d+$/.test(b.textContent.trim()) || !n) return;
+    b.textContent = '0';
+    ST.create({
+      trigger: b, start: 'top 92%', once: true,
+      onEnter: function () {
+        var o = { v: 0 };
+        gsap_.to(o, { v: n, duration: 1.1, ease: 'power2.out', delay: .3, onUpdate: function () { b.textContent = Math.round(o.v); }, onComplete: function () { b.textContent = n; } });
+      }
+    });
+  });
+
+  /* 4. 프로젝트 필터를 바꿀 때 보이는 카드가 다시 올라온다 */
+  var filters = document.querySelector('.filters');
+  if (filters) filters.addEventListener('click', function () {
+    var vis = [].slice.call(document.querySelectorAll('.proj[data-cat]')).filter(function (c) { return !c.hidden; });
+    gsap_.fromTo(vis, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: .5, stagger: .07, ease: EASE, overwrite: true, clearProps: 'opacity,visibility,transform' });
+  });
+
+  window.addEventListener('load', function () { ST.refresh(); });
 })();
 </script>
 </body>
