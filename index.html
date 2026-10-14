@@ -973,25 +973,25 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
 
       <div class="featured-in">
         <div>
-          <p class="featured-meta">제작 기록 · 2026.08.25 ~ 09.06</p>
-          <h3>작은 왕국 (Tiny Kingdom)</h3>
-          <p>Unity와 C#으로 제작한 1인 개발 모바일 로그라이트 타워디펜스입니다. 배치와 자동 합성, 구역별 규칙, 웨이브 진행, 전면 데이터 주도 설계를 중심으로 준비 단계의 판단이 재미가 되는 흐름을 설계했습니다.</p>
+          <p class="featured-meta">5인 팀 · 2026.09.07 ~ 10.16 · 마왕 성장 시스템 · 밸런스 · 연출 담당</p>
+          <h3>용사 때문에 레벨업</h3>
+          <p>5인 팀으로 6주 동안 만든 역방향 타워 디펜스입니다. 플레이어가 마왕이 되어 쳐들어오는 용사를 마왕군으로 막습니다. 저는 마왕의 스킬·레벨업·특성 트리·증강·시너지 시스템 전체와 밸런스를 맡았고, 이를 팀원이 만든 실제 전투에 연결했습니다. 튜토리얼·로딩 화면·웨이브 배너 같은 인게임 연출까지 담당했습니다.</p>
           <div class="tagrow" style="margin-top:16px">
-            <span>Unity 6</span><span>C#</span><span>UGUI</span><span>ScriptableObject</span><span>Editor Tool</span><span>Mobile</span>
+            <span>Unity 6</span><span>C#</span><span>ScriptableObject</span><span>async/await</span><span>Balance</span><span>Team</span>
           </div>
           <div class="featured-points">
-            <div>수호자 3기 자동 합성 성장</div>
-            <div>구역별 배율과 고유 규칙</div>
-            <div>전면 ScriptableObject 데이터</div>
-            <div>프레임 베이커 자체 제작</div>
+            <div>스킬 19 · 특성 40 · 증강 30 · 시너지 12</div>
+            <div>순수 C# 코어와 실전투 보정 허브</div>
+            <div>시트에서 시작하는 밸런스 파이프라인</div>
+            <div>커밋 116개 · PR 19개 · C# 약 3만 줄</div>
           </div>
           <div class="hero-cta" style="margin-top:20px">
-            <button class="pill pill-solid" type="button" data-open="kingdom">자세히 보기</button>
-            <a class="pill" href="https://github.com/jsmjsm812/TinyKingdom/releases/download/v1.0-demo/TinyKingdom_Windows.zip">Windows 빌드 받기 (44MB)</a>
+            <button class="pill pill-solid" type="button" data-open="mawang">자세히 보기</button>
+            <a class="pill" href="https://github.com/OZ-GAME-LAB/OZGL2_1">GitHub 저장소</a>
           </div>
         </div>
-        <div class="pj-hero pj-hero-clean" style="border-radius:var(--card-radius);border:1px solid var(--line)">
-          <img data-img="kingdom_title" alt="작은 왕국 타이틀 아트, 왕국 성문과 수호자, 침입자">
+        <div class="pj-hero pj-hero-clean" style="border-radius:var(--card-radius);border:1px solid var(--line);aspect-ratio:16/9">
+          <img data-img="mawang_title" alt="용사 때문에 레벨업 타이틀 아트, 마왕성 성벽 위의 마왕과 마왕군, 몰려오는 용사들">
           <span class="badge-2d" style="left:14px;top:14px;transform:none">2D</span>
         </div>
       </div>
@@ -1012,6 +1012,19 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
       </div>
 
       <div class="proj-grid">
+        <button class="proj" type="button" data-cat="team" data-open="mawang">
+          <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
+            <img data-img="mawang_title" alt="용사 때문에 레벨업 타이틀 아트">
+            <span class="badge-2d" style="left:14px;top:14px;transform:none">2D</span>
+          </div>
+          <div class="proj-body">
+            <h4>용사 때문에 레벨업</h4>
+            <p>5인 팀으로 만든 역방향 타워 디펜스입니다. 마왕 성장 시스템 전체(스킬·특성 40·증강 30·시너지 12)와 밸런스를 맡아 실제 전투에 연결했고, 튜토리얼·로딩·웨이브 배너 같은 인게임 연출도 담당했습니다.</p>
+            <span class="proj-role">5인 팀 · 2026.09.07 ~ 10.16</span>
+            <div class="tagrow"><span>Unity 6</span><span>C#</span><span>async/await</span><span>Balance</span><span>Team</span></div>
+            <span class="proj-open">자세히 보기 ▸</span>
+          </div>
+        </button>
         <button class="proj" type="button" data-cat="solo" data-open="kingdom">
           <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
             <img data-img="kingdom_title" alt="작은 왕국 타이틀 아트" style="object-position:center 22%">
@@ -1050,19 +1063,6 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
             <p>5인 팀장으로 만든 3D 라이프 시뮬레이션입니다. 세계관과 전체 기획을 맡았고, 파밍·낚시·연금술 시스템과 스킬 데이터 67종을 직접 구현했습니다.</p>
             <span class="proj-role">5인 팀 · 팀장 · 2026.06.29 ~ 08.14</span>
             <div class="tagrow"><span>Unity 6</span><span>C#</span><span>ScriptableObject</span><span>Team</span></div>
-            <span class="proj-open">자세히 보기 ▸</span>
-          </div>
-        </button>
-        <button class="proj" type="button" data-cat="team" data-open="mawang">
-          <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
-            <img data-img="mawang_title" alt="용사 때문에 레벨업 로고">
-            <span class="badge-2d" style="left:14px;top:14px;transform:none">제작 중</span>
-          </div>
-          <div class="proj-body">
-            <h4>용사 때문에 레벨업</h4>
-            <p>5인 팀으로 만든 역방향 타워 디펜스입니다. 마왕 성장 시스템 전체(스킬·특성 40·증강 30·시너지 12)와 밸런스를 맡아 실제 전투에 연결했고, 튜토리얼·로딩·웨이브 배너 같은 인게임 연출도 담당했습니다.</p>
-            <span class="proj-role">5인 팀 · 2026.09.07 ~ 10.16 · 막바지 작업 중</span>
-            <div class="tagrow"><span>Unity 6</span><span>C#</span><span>async/await</span><span>Balance</span><span>Team</span></div>
             <span class="proj-open">자세히 보기 ▸</span>
           </div>
         </button>
@@ -1144,7 +1144,7 @@ var GAME_IMG = {
   lg_killcam: "img/lg_killcam.webp",
   lg_stage1: "img/lg_stage1.webp",
   wc_title: "img/wc_title.webp",
-  mawang_title: "img/mawang_title.webp",
+  mawang_title: "img/mawang_title_v2.webp",
   lg_combat_fire: "img/lg_combat_fire.webp",
   lg_combat_slash: "img/lg_combat_slash.webp",
   wc_fishing_success: "img/wc_fishing_success.webp",
