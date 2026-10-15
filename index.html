@@ -708,6 +708,12 @@ a { color: inherit; }
 .dclip-box img, .dclip-box iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; }
 .dclip-box iframe { opacity: 0; transition: opacity .5s; pointer-events: none; }
 .dclip-box.playing iframe { opacity: 1; }
+/* 움짤처럼 반복되는 플레이 영상: 이미지 위에 겹쳐 두고, 재생이 시작되면 서서히 드러난다 */
+.loopv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .6s; border: 0; display: block; background: #000; }
+.loopv.on { opacity: 1; }
+.pj-hero .loopv { z-index: 1; }
+.proj:hover .proj-cover .loopv { transform: scale(1.06); }
+.proj-cover .loopv { transition: opacity .6s, transform .8s cubic-bezier(.16, 1, .3, 1); }
 .dclip-cap { margin-top: 8px; font-size: 12.5px; color: var(--text-3); }
 .dclip-cap a { color: var(--accent); text-decoration: none; }
 .dsplit { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
@@ -997,6 +1003,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
         </div>
         <div class="pj-hero pj-hero-clean" style="border-radius:var(--card-radius);border:1px solid var(--line);aspect-ratio:16/9">
           <img data-img="mawang_title" alt="용사 때문에 레벨업 타이틀 아트, 마왕성 성벽 위의 마왕과 마왕군, 몰려오는 용사들">
+          <video class="loopv" muted loop playsinline preload="none" data-src="video/mawang_play.mp4" aria-hidden="true"></video>
           <span class="badge-2d" style="left:14px;top:14px;transform:none">2D</span>
         </div>
       </div>
@@ -1020,6 +1027,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
         <button class="proj" type="button" data-cat="team" data-open="mawang">
           <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
             <img data-img="mawang_title" alt="용사 때문에 레벨업 타이틀 아트">
+            <video class="loopv" muted loop playsinline preload="none" data-src="video/mawang_play.mp4" aria-hidden="true"></video>
             <span class="badge-2d" style="left:14px;top:14px;transform:none">2D</span>
           </div>
           <div class="proj-body">
@@ -1048,6 +1056,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
         <button class="proj" type="button" data-cat="team" data-open="gladiator">
           <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
             <img data-img="lg_title" alt="라스트 글래디에이터 타이틀 화면">
+            <video class="loopv" muted loop playsinline preload="none" data-src="video/gladiator_play.mp4" aria-hidden="true"></video>
             <span class="badge-2d" style="left:14px;top:14px;transform:none">3D</span>
           </div>
           <div class="proj-body">
@@ -1062,6 +1071,7 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
         <button class="proj" type="button" data-cat="team" data-open="chronicle">
           <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
             <img data-img="wc_title" alt="위치 크로니클 타이틀 아트">
+            <video class="loopv" muted loop playsinline preload="none" data-src="video/chronicle_play.mp4" aria-hidden="true"></video>
             <span class="badge-2d" style="left:14px;top:14px;transform:none">3D</span>
           </div>
           <div class="proj-body">
@@ -1458,6 +1468,11 @@ var PROJECTS = {
 PROJECTS.kingdom.clip   = { id: '5jOvFMwxCXs', start: 100, end: 112, tall: true };
 PROJECTS.gladiator.clip = { id: 'g3t2Uxi8HEQ', start: 165, end: 178 };
 PROJECTS.chronicle.clip = { id: 'kNYvXD6YcRg', start: 83,  end: 96 };
+// 상세 상단의 움짤(소리 없이 반복되는 mp4). 있으면 유튜브 구간 재생 대신 이걸 쓰고, 유튜브는 전체 영상 링크로만 남긴다.
+PROJECTS.mawang.video     = 'video/mawang_play.mp4';
+PROJECTS.kingdom.video    = 'video/kingdom_play.mp4';
+PROJECTS.gladiator.video  = 'video/gladiator_play.mp4';
+PROJECTS.chronicle.video  = 'video/chronicle_play.mp4';
 
 /* ── 상세 오버레이 ─────────────────────────────────────────── */
 (function () {
@@ -1482,6 +1497,33 @@ PROJECTS.chronicle.clip = { id: 'kNYvXD6YcRg', start: 83,  end: 96 };
     }
   }
   hydrateImages(document); // 정적 카드 커버(프로젝트 인덱스)
+
+  // 움짤: 화면에 보일 때만 불러와 재생하고, 벗어나면 멈춘다(데이터·배터리 절약). 동작 줄이기 설정이면 이미지만 둔다.
+  var loopIO = null;
+  function initLoops(root) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var vids = (root || document).querySelectorAll('video.loopv');
+    if (!('IntersectionObserver' in window)) return;
+    if (!loopIO) {
+      loopIO = new IntersectionObserver(function (es) {
+        es.forEach(function (en) {
+          var v = en.target;
+          if (en.isIntersecting) {
+            if (!v.src) v.src = v.getAttribute('data-src');
+            var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+          } else if (v.src) { v.pause(); }
+        });
+      }, { rootMargin: '120px' });
+    }
+    for (var i = 0; i < vids.length; i++) {
+      var v = vids[i];
+      if (v.__loop) continue;
+      v.__loop = true;
+      v.addEventListener('playing', function () { this.classList.add('on'); });
+      loopIO.observe(v);
+    }
+  }
+  initLoops(document);
 
   function render(key) {
     var p = PROJECTS[key];
@@ -1513,9 +1555,10 @@ PROJECTS.chronicle.clip = { id: 'kNYvXD6YcRg', start: 83,  end: 96 };
         }
         return '<div><dt>' + esc(s[0]) + '</dt><dd>' + v + '</dd></div>';
       }).join('') + '</dl>' +
-      (p.clip ? '<div class="dclip' + (p.clip.tall ? ' tall' : '') + '">' +
-        '<div class="dclip-box"><img data-img="' + p.keyArt + '" alt=""><div class="dclip-holder"></div></div>' +
-        '<p class="dclip-cap">플레이 영상 일부를 반복 재생합니다. <a href="https://youtu.be/' + p.clip.id + '" target="_blank" rel="noopener">전체 영상 보기 ↗</a></p></div>' : '') +
+      ((p.video || p.clip) ? '<div class="dclip' + ((p.clip && p.clip.tall) ? ' tall' : '') + '">' +
+        '<div class="dclip-box"><img data-img="' + p.keyArt + '" alt="">' +
+        (p.video ? '<video class="loopv" muted loop playsinline preload="none" data-src="' + p.video + '" aria-label="' + esc(p.name) + ' 플레이 영상(소리 없음, 반복)"></video>' : '<div class="dclip-holder"></div>') + '</div>' +
+        '<p class="dclip-cap">플레이 영상 일부를 반복 재생합니다.' + (p.clip ? ' <a href="https://youtu.be/' + p.clip.id + '" target="_blank" rel="noopener">전체 영상 보기 ↗</a>' : '') + '</p></div>' : '') +
       '</div></div>';
 
     p.sections.forEach(function (s, i) {
@@ -1539,6 +1582,7 @@ PROJECTS.chronicle.clip = { id: 'kNYvXD6YcRg', start: 83,  end: 96 };
     stopClip();
     bodyEl.innerHTML = html;
     hydrateImages(bodyEl);
+    initLoops(bodyEl);
     scroller.scrollTop = 0;
     attachSpy();
   }
@@ -1600,7 +1644,7 @@ PROJECTS.chronicle.clip = { id: 'kNYvXD6YcRg', start: 83,  end: 96 };
     render(key);
     ov.hidden = false;
     if (window.__revealDetail) window.__revealDetail();
-    if (PROJECTS[key] && PROJECTS[key].clip) startClip(PROJECTS[key].clip);
+    if (PROJECTS[key] && PROJECTS[key].clip && !PROJECTS[key].video) startClip(PROJECTS[key].clip);
     document.body.classList.add('locked');
     // 상세를 열면 배경이 그 게임의 씬으로 전환된다
     if (window.__setScene) window.__setScene(key);
