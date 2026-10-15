@@ -411,12 +411,13 @@ a { color: inherit; }
 .block-card::after { right: 10px; bottom: 10px; border-right: 2px solid; border-bottom: 2px solid; }
 .block-wide { grid-column: 1 / -1; }
 
-#about    { order: 1; align-self: start; }
-#skills   { order: 2; align-self: start; }
-#workflow { order: 3; }
-#featured { order: 4; }
-#projects { order: 5; }
-#contact  { order: 6; }
+#featured { order: 1; }
+#projects { order: 2; }
+#about    { order: 3; align-self: start; }
+#skills   { order: 4; align-self: start; }
+#workflow { order: 5; }
+#clips    { order: 6; }
+#contact  { order: 7; }
 
 .block-kicker {
   display: inline-flex; margin-bottom: 8px; padding: 5px 8px;
@@ -873,9 +874,9 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
     </a>
     <nav class="topnav" aria-label="섹션">
       <a href="#home">Home</a>
+      <a href="#projects">Projects</a>
       <a href="#about">About</a>
       <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
       <a href="#clips">Clips</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -920,76 +921,6 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
 
   <!-- ══ BOARD ══ -->
   <div class="block-board">
-
-    <!-- ABOUT -->
-    <section class="block-card" id="about" data-scene="home">
-      <div class="block-head">
-        <span class="block-kicker">PLAYER INFO</span>
-        <h2>플레이 감각을 코드로 옮기는 개발자</h2>
-        <p>전투와 UI, 데이터 흐름을 설계하고 구현합니다. 작은 상호작용도 플레이어가 재미있게 느끼도록 구조와 감각을 함께 다듬습니다.</p>
-      </div>
-
-      <div class="mini-grid">
-        <div class="mini">
-          <div class="icon-sq">01</div>
-          <b>재미부터 정의한다</b>
-          <span>패링의 0.2초, 합성이 터지는 순간. 재미의 단위를 먼저 정하고 코드를 짭니다.</span>
-        </div>
-        <div class="mini">
-          <div class="icon-sq">02</div>
-          <b>데이터와 로직 분리</b>
-          <span>수치는 ScriptableObject로, 코드에는 실행 규칙만. 밸런싱에 코드를 열지 않습니다.</span>
-        </div>
-        <div class="mini">
-          <div class="icon-sq">03</div>
-          <b>범위를 줄여 완주</b>
-          <span>미완성 기능 열 개보다 끝까지 다듬은 하나가 결과를 만든다고 생각합니다.</span>
-        </div>
-        <div class="mini">
-          <div class="icon-sq">04</div>
-          <b>직접 플레이해서 고친다</b>
-          <span>손맛은 코드로 판단할 수 없어서 매번 붙여보고 수치를 고칩니다.</span>
-        </div>
-      </div>
-
-      <div class="stat-row">
-        <div class="stat"><b>3</b><span>완주 프로젝트</span></div>
-        <div class="stat"><b>2</b><span>팀장 경험</span></div>
-        <div class="stat"><b>Unity</b><span>주 엔진</span></div>
-        <div class="stat"><b>C#</b><span>주 언어</span></div>
-      </div>
-
-      <ul class="log-list" style="margin-top:18px">
-        <li><i>▸</i><span><b>학력</b> 청운대학교 (호텔조리식당경영학과 · 복수전공 멀티미디어학과, 2020~2026)</span></li>
-        <li><i>▸</i><span><b>교육</b> 넥스트러너스 게임개발 초격차 캠프 5기 수료 (2026.02~08)</span></li>
-      </ul>
-    </section>
-
-    <!-- SKILLS -->
-    <section class="block-card" id="skills" data-scene="home">
-      <div class="block-head">
-        <span class="block-kicker">LOADOUT</span>
-        <h2>기술 스택</h2>
-        <p>세 프로젝트에서 실제로 설계하고 구현한 범위입니다.</p>
-      </div>
-
-      <div class="mini-grid">
-        <div class="mini"><b>Unity 6</b><span>클라이언트 시스템 구현</span></div>
-        <div class="mini"><b>C#</b><span>게임 로직과 객체지향 구조</span></div>
-        <div class="mini"><b>ScriptableObject</b><span>데이터 주도 설계</span></div>
-        <div class="mini"><b>FSM</b><span>전투 상태와 전이 규칙</span></div>
-        <div class="mini"><b>UGUI</b><span>모바일 세로 레이아웃</span></div>
-        <div class="mini"><b>Editor Tool</b><span>프레임 베이커, 디버그 오버레이</span></div>
-      </div>
-
-      <ul class="log-list" style="margin-top:22px">
-        <li><i>▸</i><span><b>Unity 6 · C#</b> 기반 클라이언트 개발</span></li>
-        <li><i>▸</i><span><b>팀 리드</b> 2인 프로젝트, 5인 프로젝트 팀장</span></li>
-        <li><i>▸</i><span><b>1인 개발</b> 기획부터 데이터, 툴, 아트 파이프라인까지</span></li>
-        <li><i>▸</i><span><b>플랫폼</b> PC 2종, 모바일 세로 1종</span></li>
-      </ul>
-    </section>
-
 
     <!-- FEATURED -->
     <section class="block-card block-wide" id="featured" data-scene="kingdom">
@@ -1098,6 +1029,76 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
         </button>
       </div>
     </section>
+
+    <!-- ABOUT -->
+    <section class="block-card" id="about" data-scene="home">
+      <div class="block-head">
+        <span class="block-kicker">PLAYER INFO</span>
+        <h2>플레이 감각을 코드로 옮기는 개발자</h2>
+        <p>전투와 UI, 데이터 흐름을 설계하고 구현합니다. 작은 상호작용도 플레이어가 재미있게 느끼도록 구조와 감각을 함께 다듬습니다.</p>
+      </div>
+
+      <div class="mini-grid">
+        <div class="mini">
+          <div class="icon-sq">01</div>
+          <b>재미부터 정의한다</b>
+          <span>패링의 0.2초, 합성이 터지는 순간. 재미의 단위를 먼저 정하고 코드를 짭니다.</span>
+        </div>
+        <div class="mini">
+          <div class="icon-sq">02</div>
+          <b>데이터와 로직 분리</b>
+          <span>수치는 ScriptableObject로, 코드에는 실행 규칙만. 밸런싱에 코드를 열지 않습니다.</span>
+        </div>
+        <div class="mini">
+          <div class="icon-sq">03</div>
+          <b>범위를 줄여 완주</b>
+          <span>미완성 기능 열 개보다 끝까지 다듬은 하나가 결과를 만든다고 생각합니다.</span>
+        </div>
+        <div class="mini">
+          <div class="icon-sq">04</div>
+          <b>직접 플레이해서 고친다</b>
+          <span>손맛은 코드로 판단할 수 없어서 매번 붙여보고 수치를 고칩니다.</span>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat"><b>3</b><span>완주 프로젝트</span></div>
+        <div class="stat"><b>2</b><span>팀장 경험</span></div>
+        <div class="stat"><b>Unity</b><span>주 엔진</span></div>
+        <div class="stat"><b>C#</b><span>주 언어</span></div>
+      </div>
+
+      <ul class="log-list" style="margin-top:18px">
+        <li><i>▸</i><span><b>학력</b> 청운대학교 (호텔조리식당경영학과 · 복수전공 멀티미디어학과, 2020~2026)</span></li>
+        <li><i>▸</i><span><b>교육</b> 넥스트러너스 게임개발 초격차 캠프 5기 수료 (2026.02~08)</span></li>
+      </ul>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="block-card" id="skills" data-scene="home">
+      <div class="block-head">
+        <span class="block-kicker">LOADOUT</span>
+        <h2>기술 스택</h2>
+        <p>세 프로젝트에서 실제로 설계하고 구현한 범위입니다.</p>
+      </div>
+
+      <div class="mini-grid">
+        <div class="mini"><b>Unity 6</b><span>클라이언트 시스템 구현</span></div>
+        <div class="mini"><b>C#</b><span>게임 로직과 객체지향 구조</span></div>
+        <div class="mini"><b>ScriptableObject</b><span>데이터 주도 설계</span></div>
+        <div class="mini"><b>FSM</b><span>전투 상태와 전이 규칙</span></div>
+        <div class="mini"><b>UGUI</b><span>모바일 세로 레이아웃</span></div>
+        <div class="mini"><b>Editor Tool</b><span>프레임 베이커, 디버그 오버레이</span></div>
+      </div>
+
+      <ul class="log-list" style="margin-top:22px">
+        <li><i>▸</i><span><b>Unity 6 · C#</b> 기반 클라이언트 개발</span></li>
+        <li><i>▸</i><span><b>팀 리드</b> 2인 프로젝트, 5인 프로젝트 팀장</span></li>
+        <li><i>▸</i><span><b>1인 개발</b> 기획부터 데이터, 툴, 아트 파이프라인까지</span></li>
+        <li><i>▸</i><span><b>플랫폼</b> PC 2종, 모바일 세로 1종</span></li>
+      </ul>
+    </section>
+
 
     <!-- CLIPS -->
     <section class="block-card block-wide" id="clips" data-scene="kingdom">
