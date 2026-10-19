@@ -727,9 +727,12 @@ a { color: inherit; }
 .dvidf { margin: 0; border: 1px solid var(--line); border-radius: var(--card-radius); overflow: hidden; background: #000; }
 .dvid { width: 100%; height: auto; display: block; background: #05080f; object-fit: contain; }
 .dvidf figcaption { font-family: var(--mono); font-size: 11.5px; color: var(--text-3); line-height: 1.5; padding: 9px 11px; border-top: 1px solid var(--line); background: var(--panel-2); }
-.ai-intro { font-size: 14.5px; color: var(--muted); line-height: 1.75; margin: 0 0 16px; }
-#ai .dsec { margin-top: 34px; margin-bottom: 0; }
-#ai .dsec:last-child { margin-bottom: 4px; }
+.aicard { display: block; width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer; padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--card-radius); background: var(--panel); transition: border-color .25s, transform .25s; }
+.aicard:hover, .aicard:focus-visible { border-color: var(--primary); transform: translateY(-2px); }
+.aic-lead { margin: 0 0 14px; font-size: 14.5px; line-height: 1.7; color: var(--muted); }
+.aic-lead b { color: var(--text); }
+.aic-label { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; color: var(--text-3); margin-bottom: 8px; }
+.aic-chips { margin: 0 0 14px; }
 .linkbtn { font: inherit; color: var(--primary); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
 .dclip { margin-top: 18px; }
 .dclip-box { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--line); border-radius: var(--card-radius); background: #05080f; }
@@ -1602,18 +1605,19 @@ PROJECTS.ai = {
   ]
 };
 
-/* AI 활용 섹션: 위 PROJECTS.ai 의 문구를 본문에 그대로 펼친다 */
+/* AI 활용 섹션: 본문에는 요약 카드만 두고, 누르면 PROJECTS.ai 상세 창이 열린다 */
 (function () {
   var host = document.getElementById('ai-body');
   if (!host) return;
   var a = PROJECTS.ai;
-  function e(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-  var h = '<p class="ai-intro">' + a.intro + '</p><dl class="dspec">' +
-    a.spec.map(function (s) { return '<div><dt>' + e(s[0]) + '</dt><dd>' + e(s[1]) + '</dd></div>'; }).join('') + '</dl>';
-  a.sections.forEach(function (s) {
-    h += '<section class="dsec" id="ai-' + s.id + '"><h3><i>' + s.icon + '</i>' + e(s.label) + '</h3>' + s.html + '</section>';
-  });
-  host.innerHTML = h;
+  var chips = a.sections.map(function (s) { return '<span>' + s.icon + ' ' + s.label + '</span>'; }).join('');
+  host.innerHTML =
+    '<button type="button" class="aicard" data-open="ai" aria-label="AI 활용 자세히 보기">' +
+      '<p class="aic-lead">구현은 AI와 함께, <b>결정과 검증은 직접</b>. 작은 왕국과 용사 때문에 레벨업, 이 포트폴리오를 이렇게 만들었습니다.</p>' +
+      '<div class="aic-label">자세히 보기에서 볼 수 있는 내용</div>' +
+      '<div class="tagrow aic-chips">' + chips + '</div>' +
+      '<span class="proj-open">자세히 보기 ▸</span>' +
+    '</button>';
 })();
 
 /* ── 상세 오버레이 ─────────────────────────────────────────── */
