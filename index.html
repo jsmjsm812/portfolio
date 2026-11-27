@@ -1004,6 +1004,21 @@ code { font-family: ui-monospace, Menlo, monospace; font-size: .88em; background
       </div>
 
       <div class="proj-grid">
+        <button class="proj" type="button" data-cat="solo" data-open="reborn">
+          <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
+            <img data-img="reborn_title" alt="환생했더니 무기였습니다 타이틀 로고">
+            <span class="badge-2d" style="left:14px;top:14px;transform:none">3D</span>
+          </div>
+          <div class="proj-body">
+            <span class="stove-soon">현재 작업 중</span>
+            <h4>환생했더니 무기였습니다</h4>
+            <p>무기로 환생한 주인공이 원시→중세→근대→현대→미래 다섯 시대를 거치며 강해지는 방치형 사냥 게임입니다. 시대별 무기 25종, 정령 12종, 자동 스킬 10종을 1인 개발로 만들고 있습니다.</p>
+            <span class="proj-role">1인 개발 · 모바일 · 2026.11 ~ 진행 중</span>
+            <div class="tagrow"><span>Unity 6</span><span>C#</span><span>URP</span><span>Toon Shader</span><span>Blender</span></div>
+            <div class="proj-facts"><span>개발 중 화면</span><span>AI · Claude Code</span></div>
+            <span class="proj-open">자세히 보기 ▸</span>
+          </div>
+        </button>
         <button class="proj" type="button" data-cat="team" data-open="mawang">
           <div class="proj-cover pj-hero pj-hero-clean" style="aspect-ratio:16/9;border-bottom:1px solid var(--line)">
             <img data-img="mawang_title" alt="용사 때문에 레벨업 타이틀 아트">
@@ -1287,7 +1302,11 @@ var GAME_IMG = {
   lg_title: "img/lg_title.webp",
   wc_harvest: "img/wc_harvest.webp",
   wc_fishing: "img/wc_fishing.webp",
-  wc_cooking: "img/wc_cooking.webp"
+  wc_cooking: "img/wc_cooking.webp",
+  reborn_title: "img/reborn_title.webp",
+  reborn_icon: "img/reborn_icon.webp",
+  reborn_hunt_stone: "img/reborn_hunt_stone.webp",
+  reborn_hunt_medieval: "img/reborn_hunt_medieval.webp"
 };
 </script>
 <script>
@@ -1598,6 +1617,38 @@ var PROJECTS = {
         '<div class="dcase"><span class="dcase-tag bug">버그 해결</span><h4>버프 스킬이 연출만 나오고 스탯이 그대로</h4><dl class="dlog"><div><dt>증상</dt><dd>광폭화·강철 피부를 쓰면 이펙트와 로그는 나오는데 실제 공격속도·방어는 하나도 바뀌지 않았습니다.</dd></div><div><dt>원인</dt><dd>스킬 쪽은 <code>"AttackSpeed"</code>(파스칼)를 넘기고 유닛 쪽은 <code>"attackSpeed"</code>(카멜)를 받아, 문자열 키가 조용히 무시됐습니다.</dd></div><div><dt>해결</dt><dd>실행부에서 키 변환을 한 곳으로 모았습니다. 시스템 경계에서 문자열 키는 컴파일러가 못 잡기 때문에, 경계에는 변환 함수를 두는 습관을 들였습니다.</dd></div></dl></div><div class="dcase"><span class="dcase-tag bug">버그 해결</span><h4>스킬이 마왕이 아닌 원점에서 나감</h4><dl class="dlog"><div><dt>원인</dt><dd>초기화 시점에는 라운드가 시작 전이라 마왕 위치가 비어 있었는데, 그 값을 시전 위치로 한 번만 저장했습니다.</dd></div><div><dt>해결</dt><dd>시전 위치를 매 프레임 최신 마왕 위치로 갱신하도록 바꿨습니다. 다른 시스템이 늦게 채우는 값은 초기화 시점에 고정하지 않습니다.</dd></div></dl></div><div class="dcase"><span class="dcase-tag bug">버그 해결</span><h4>범위 안에 있었는데 안 맞았다</h4><dl class="dlog"><div><dt>원인</dt><dd>VFX 이미지에 프레임 여백이 있어 보이는 크기와 판정 반경이 달랐고, 판정에도 여유값이 붙어 있었습니다.</dd></div><div><dt>해결</dt><dd>VFX 스프라이트의 실제 픽셀 알파로 보이는 폭과 무게중심을 측정해 크기·위치를 사거리 표시와 맞추고, 판정 여유를 없앴습니다.</dd></div></dl></div><div class="dcase"><span class="dcase-tag bug">버그 해결</span><h4>포기를 누르면 확인창이 뜨기도 전에 로비로 이동</h4><dl class="dlog"><div><dt>원인</dt><dd>씬에 저장된 이벤트 연결이 이미 진행 중단과 로비 이동을 실행하고 있었습니다.</dd></div><div><dt>해결</dt><dd>씬 파일을 고치지 않고 실행 중에 그 연결만 끈 뒤 확인창을 거쳐서만 포기하게 했습니다. 포기하면 이어하기 저장은 지우고 깬 웨이브는 기록으로 남깁니다.</dd></div></dl></div><div class="dcase"><span class="dcase-tag bug">버그 해결</span><h4>글자가 처음 뜰 때 깨졌다가 나타남</h4><dl class="dlog"><div><dt>원인</dt><dd>동적 글꼴은 처음 쓰는 글자를 그 순간 글꼴 아틀라스에 그려 넣어서, 그 사이 한 프레임 깨져 보였습니다.</dd></div><div><dt>해결</dt><dd>글자를 넣기 직전에 필요한 글자를 아틀라스에 미리 넣는 유틸을 만들어 카드·증강·로딩·배너에 적용했습니다. 없는 글자는 대체 글꼴에도 넣습니다.</dd></div></dl></div><div class="dcase"><span class="dcase-tag feature">기능 구현</span><h4>로딩 바 위를 달리는 마왕의 발 위치 맞추기</h4><dl class="dlog"><div><dt>문제</dt><dd>프리팹 렌더러 범위에 눈에 안 보이는 큰 부품이 섞여 있어, 범위로 계산한 발 위치와 크기가 실제와 달랐습니다.</dd></div><div><dt>해결</dt><dd>한 번 그린 RenderTexture의 실제 픽셀을 읽어 캐릭터가 차지하는 영역을 측정하고, 그 값으로 발을 로딩 바 윗면에 맞췄습니다.</dd></div></dl></div>' },
       { id:'learn', icon:'09', label:'배운 점', html:
         '<p>혼자 만들 때는 시스템을 씬에 바로 붙여도 됐지만, 다섯 명이 동시에 만드는 프로젝트에서는 <b>다른 사람의 일정에 내 검증이 묶이지 않게 하는 구조</b>가 먼저였습니다. 코어를 순수 C#으로 떼어 놓은 덕분에 실제 전투가 완성되기 전에 성장 시스템을 끝낼 수 있었습니다.</p><p>남의 코드에 기능을 붙일 때는 많이 고치는 것보다, 값이 없으면 원래대로 도는 작은 접점을 만들고 그 사실을 커밋에 분명히 적는 편이 팀 전체 속도를 지킨다는 것을 배웠습니다. 밸런스도 감으로 숫자를 바꾸기보다 시트에서 출발해 시뮬레이션과 플레이로 확인하는 반복 구조를 만들어 두니, 피드백이 들어왔을 때 근거를 갖고 조정할 수 있었습니다.</p>' }
+    ]
+  },
+  reborn: {
+    kicker: 'IN PROGRESS · 현재 작업 중',
+    title: 'REBORN AS\nA WEAPON', name: '환생했더니 무기였습니다', sub: '1인 개발 · 모바일 방치형 RPG · 2026.11 ~ 진행 중',
+    keyArt: 'reborn_title',
+    tagline: '무기로 환생한 주인공이 원시→중세→근대→현대→미래 다섯 시대를 거치며 강해지는 방치형 사냥 게임',
+    intro: 'Unity 6(URP)로 혼자 만들고 있는 세로형 모바일 방치형 RPG입니다. 아직 개발 중이라 아래 내용과 화면은 현재 빌드 기준이며, 바뀔 수 있습니다.',
+    spec: [['기간','2026.11 ~ 진행 중'],['엔진','Unity 6 · URP · C#'],['플랫폼','모바일 · 세로 9:16'],['시점','3D 쿼터뷰 · 3인칭'],['팀','1인 개발'],['상태','개발 중 (미출시)']],
+    sections: [
+      { id:'about', icon:'01', label:'게임 소개', html:
+        '<img data-img="reborn_icon" alt="앱 아이콘. 눈 달린 검 캐릭터와 불꽃 정령" style="float:right;width:112px;margin:0 0 10px 16px;border-radius:22px">' +
+        '<p>주인공은 사람이 아니라 <b>무기로 환생</b>합니다. 몬스터를 자동으로 사냥하며 성장하고, 환생할 때마다 다음 무기를 골라 <b>원시 → 중세 → 근대 → 현대 → 미래</b> 다섯 시대를 거칩니다.</p>' +
+        '<div class="dcards" style="clear:both">' +
+        '<div><b>시대별 무기 25종</b><span>근접·사격·광역 계열. 환생할 때 다음 무기 3개 중 하나를 고릅니다.</span></div>' +
+        '<div><b>정령 12종 · 자동 스킬 10종</b><span>정령이 함께 싸우고, 스킬은 자동으로 시전됩니다.</span></div>' +
+        '<div><b>MMORPG식 사냥터</b><span>몬스터가 한 줄로 오지 않고 필드에 흩어져 돌아다니며, 시대마다 보스가 있습니다.</span></div>' +
+        '<div><b>애니 셀 셰이딩 3D</b><span>URP 커스텀 툰 셰이더로 그린 쿼터뷰·3인칭 화면과 금테 카드 UI.</span></div>' +
+        '</div>' },
+      { id:'shots', icon:'02', label:'개발 중 화면', html:
+        '<div class="dgallery">' +
+        '<figure class="rshot"><img data-img="reborn_hunt_stone" alt="원시 시대 사냥터. 돌도끼가 버섯 몬스터를 때리고 피해 숫자가 뜬다" loading="lazy"><figcaption>원시 시대 · 돌도끼가 버섯 몬스터를 타격</figcaption></figure>' +
+        '<figure class="rshot"><img data-img="reborn_hunt_medieval" alt="중세 시대 사냥터. 장궁으로 흩어져 있는 몬스터를 사냥한다" loading="lazy"><figcaption>중세 시대 · 장궁으로 사냥터 몬스터 사냥</figcaption></figure>' +
+        '</div><p style="margin-top:10px;font-size:12.5px;color:var(--text-3)">에디터 자동 QA가 찍은 개발 중 캡처입니다.</p>' },
+      { id:'tech', icon:'03', label:'사용 기술', html:
+        '<div class="dcards">' +
+        '<div><b>Unity 6 · C#</b><span>게임 로직과 UI</span></div>' +
+        '<div><b>URP 커스텀 툰 셰이더</b><span>애니풍 셀 셰이딩 렌더</span></div>' +
+        '<div><b>Blender</b><span>무기·몬스터·정령 모델과 걷기 애니메이션</span></div>' +
+        '<div><b>Python</b><span>아이콘·바닥 텍스처 생성</span></div>' +
+        '<div><b>자동 QA</b><span>에디터에서 장면별 캡처와 로직 검사</span></div>' +
+        '</div>' }
     ]
   }
 };
